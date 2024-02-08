@@ -61,28 +61,52 @@ def create_accounts():
 # LIST ALL ACCOUNTS
 ######################################################################
 
-# ... place you code here to LIST accounts ...
+@app.route('/accounts', methods=['GET'])
+def list_accounts():
+    accounts = Account.all()
+    return jsonify([account.serialize() for account in accounts]), status.HTTP_200_OK
 
 
 ######################################################################
 # READ AN ACCOUNT
 ######################################################################
 
-# ... place you code here to READ an account ...
+@app.route('/accounts/<int:account_id>', methods=['GET'])
+def read_account(account_id):
+    account = Account.find(account_id)
+    if not account:
+        return '', status.HTTP_404_NOT_FOUND
+    return jsonify(account.serialize()), status.HTTP_200_OK
 
 
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
 
-# ... place you code here to UPDATE an account ...
+@app.route('/accounts/<int:account_id>', methods=['PUT'])
+def update_account(account_id):
+    account = Account.find(account_id)
+    if not account:
+        return '', status.HTTP_404_NOT_FOUND
+    account.update(request.get_json())
+    return jsonify(account.serialize()), status.HTTP_200_OK
+
 
 
 ######################################################################
 # DELETE AN ACCOUNT
 ######################################################################
 
-# ... place you code here to DELETE an account ...
+@app.route('/accounts/<int:account_id>', methods=['DELETE'])
+def delete_account(account_id):
+    account = Account.find(account_id)
+    if account:
+        account.delete()
+    return '', status.HTTP_204_NO_CONTENT
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
 
 
 ######################################################################
@@ -100,3 +124,4 @@ def check_content_type(media_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         f"Content-Type must be {media_type}",
     )
+
