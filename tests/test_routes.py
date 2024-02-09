@@ -17,16 +17,16 @@ from service import talisman
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
-
 BASE_URL = "/accounts"
 HTTPS_ENVIRON = {'wsgi.url_scheme': 'https'}
 
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
-class TestAccountService(TestCase):
-    """Account Service Tests"""
 
+class TestAccountService(TestCase):
+
+    """Account Service Tests"""
     @classmethod
     def setUpClass(cls):
         """Run once before all tests"""
@@ -123,7 +123,8 @@ class TestAccountService(TestCase):
             json=account.serialize(),
             content_type="test/html"
         )
-        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        self.assertEqual(response.status_code, 
+        status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
     # ADD YOUR TEST CASES HERE ...
 
@@ -144,7 +145,8 @@ class TestAccountService(TestCase):
     def get_accounts(account_id):
         """
         Reads an Account
-        This endpoint will read an Account based the account_id that is requested
+        This endpoint will read an Account based the account_id that is 
+        requested
         """
         app.logger.info("Request to read an Account with id: %s", account_id)
 
@@ -167,7 +169,6 @@ class TestAccountService(TestCase):
         data = resp.get_json()
         self.assertEqual(len(data), 5)
 
-
     def test_update_account(self):
         """It should Update an existing Account"""
         # create an Account to update
@@ -182,7 +183,6 @@ class TestAccountService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_account = resp.get_json()
         self.assertEqual(updated_account["name"], "Something Known")                                
-
 
     def test_delete_account(self):
         """It should Delete an Account"""
